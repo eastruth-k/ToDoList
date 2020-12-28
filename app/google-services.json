@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "89582840147",
+    "firebase_url": "https://todo-list-18c7e.firebaseio.com",
+    "project_id": "todo-list-18c7e",
+    "storage_bucket": "todo-list-18c7e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89582840147:android:dc3ae4c1a1f584465d59a6",
+        "android_client_info": {
+          "package_name": "com.eastruth.todolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89582840147-f199h7lrfefdj38ea1cmkn0t4b74kpfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKvFShDGHYIic-nV1pXMormqvlk4-uGVg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89582840147-f199h7lrfefdj38ea1cmkn0t4b74kpfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

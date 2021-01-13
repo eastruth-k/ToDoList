@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -31,6 +32,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println("ddong MainActivity onCreate")
+
+        val pi = packageManager.getPackageInfo(packageName, 0)
+        println("ddong versionCode : ${pi.versionCode}")
+        println("ddong versionName : ${pi.versionName}")
+        Toast.makeText(applicationContext, "${pi.versionCode} : ${pi.versionName}", Toast.LENGTH_LONG).show()
 
         // setContentView(R.layout.activity_main) 대신에 view binding 사용
         binding = ActivityMainBinding.inflate(layoutInflater)

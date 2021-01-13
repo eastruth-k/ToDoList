@@ -2,6 +2,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: BumpReadMeVersionPlugin
+
+def getAppVersionCode = { ->
+    def code = project.hasProperty('versionCode') ? versionCode.toInteger() : 1
+    return code
+}
+
+def getAppVersionName = { ->
+    def name = project.hasProperty('versionName') ? versionName : "1.0"
+    return name
+}
 
 android {
     compileSdkVersion 30
@@ -11,10 +22,10 @@ android {
         applicationId "com.eastruth.todolist"
         minSdkVersion 16
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode getAppVersionCode()
+        versionName getAppVersionName()
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true //추가
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,4 +69,72 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+bumpReadMeVersion {
+    overrideContent = 'app:'
+}
+
+class VersionPluginExtension {
+    String overrideContent
+}
+
+@SuppressWarnings("GroovyUnusedDeclaration")
+class BumpReadMeVersionPlugin implements Plugin<Project> {
+
+    @Override
+    void apply(Project project) {
+
+        project.extensions.create('bumpReadMeVersion', VersionPluginExtension)
+
+        project.afterEvaluate {
+            project.task('bumpVersion', type: BumpVersion) {
+                readMe = new File(project.rootDir.absolutePath + "/README.md")
+                buildGradle = new File(project.rootDir.absolutePath + "/app/build.gradle")
+                versionCode = project.android.defaultConfig.versionCode
+                versionName = project.android.defaultConfig.versionName
+            }
+        }
+    }
+}
+
+@SuppressWarnings("GroovyUnusedDeclaration")
+class BumpVersion extends DefaultTask {
+
+    def readMe
+    def buildGradle
+    def versionCode
+    def versionName
+
+    File getReadMe() {
+        project.file(readMe)
+    }
+
+    File getBuildGradle() {
+        project.file(buildGradle)
+    }
+
+    BumpVersion() {
+        group = 'my plugin'
+    }
+
+    @TaskAction
+    def bump() {
+        description = 'Updates ReadMe file with the latest version as well as default values of Android version code and version name in build.gradle file'
+
+        // Update readme file
+        File readMeFile = getReadMe()
+        String contents = readMeFile.getText('UTF-8')
+        contents = contents.replaceAll("Version_Code:.*", "Version_Code:${versionCode}")
+        contents = contents.replaceAll("Version_Name:.*", "Version_Name:${versionName}")
+        readMeFile.write(contents, 'UTF-8')
+
+        // Update build.gradle file
+//        File buildGradleFile = getBuildGradle()
+//        contents = buildGradleFile.getText('UTF-8')
+//        contents = contents.replaceAll("android_version_code=.*", "android_version_code=${versionCode}")
+//        contents = contents.replaceAll("android_version_name=.*", "android_version_name=\"${versionName}\"")
+//        buildGradleFile.write(contents, 'UTF-8')
+    }
+
 }
